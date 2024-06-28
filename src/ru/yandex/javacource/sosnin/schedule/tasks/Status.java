@@ -1,4 +1,4 @@
-package Tasks;
+package ru.yandex.javacource.sosnin.schedule.tasks;
 
 public enum Status {
     NEW,
