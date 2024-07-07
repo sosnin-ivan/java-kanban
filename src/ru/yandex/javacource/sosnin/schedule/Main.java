@@ -1,12 +1,13 @@
 package ru.yandex.javacource.sosnin.schedule;
 
+import ru.yandex.javacource.sosnin.schedule.manager.Managers;
 import ru.yandex.javacource.sosnin.schedule.manager.TaskManager;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager m = new TaskManager();
+        TaskManager m = Managers.getDefaultTaskManager();
         int createdId;
 
         // create
@@ -152,5 +153,10 @@ public class Main {
 
         System.out.print("all subtasks changed to NEW              ===> ");
         System.out.println(m.getEpic(9));
+
+        // history
+
+        System.out.print("history of given tasks                   ===> ");
+        System.out.println(m.getHistory());
     }
 }
