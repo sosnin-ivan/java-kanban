@@ -21,7 +21,8 @@ public class InMemoryHistoryManager implements HistoryManager {
             history.removeFirst();
         }
 
-        history.add(task);
+        Task newTask = new Task(task);
+        history.add(newTask);
     }
 
     @Override
