@@ -2,7 +2,7 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     // create
@@ -15,11 +15,11 @@ public interface TaskManager {
 
     // get
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
-    ArrayList<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
     Task getTask(int id);
 
@@ -27,7 +27,7 @@ public interface TaskManager {
 
     Subtask getSubtask(int id);
 
-    ArrayList<Subtask> getSubtasksByEpic(int id);
+    List<Subtask> getSubtasksByEpic(int id);
 
     // update
 
@@ -53,5 +53,5 @@ public interface TaskManager {
 
     // history
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 }

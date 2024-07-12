@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +27,7 @@ class InMemoryTaskManagerTest {
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
 
-        final ArrayList<Task> tasks = manager.getAllTasks();
+        final List<Task> tasks = manager.getAllTasks();
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
@@ -43,7 +43,7 @@ class InMemoryTaskManagerTest {
         assertNotNull(savedEpic, "Эпик не найден.");
         assertEquals(epic, savedEpic, "Эпики не совпадают.");
 
-        final ArrayList<Epic> epics = manager.getAllEpics();
+        final List<Epic> epics = manager.getAllEpics();
 
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
@@ -62,7 +62,7 @@ class InMemoryTaskManagerTest {
         assertNotNull(savedSubtask, "Сабтаска не найдена.");
         assertEquals(subtask, savedSubtask, "Сабтаски не совпадают.");
 
-        final ArrayList<Subtask> subtasks = manager.getAllSubtasks();
+        final List<Subtask> subtasks = manager.getAllSubtasks();
 
         assertNotNull(subtasks, "Сабтаски не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество сабтасок.");
@@ -183,7 +183,7 @@ class InMemoryTaskManagerTest {
         Task task = new Task("Test task", "Test task desc");
         int taskId = manager.createTask(task);
         manager.getTask(taskId);
-        ArrayList<Task> history = manager.getHistory();
+        List<Task> history = manager.getHistory();
         assertEquals(1, history.size(), "Неверное количество записей в истории.");
 
         Task savedTask = manager.getTask(taskId);
@@ -226,12 +226,51 @@ class InMemoryTaskManagerTest {
     void historySavePreviousVersionOfTask() {
         Task task = new Task("Test task", "Test task desc");
         int taskId = manager.createTask(task);
-        Task savedTask = manager.getTask(taskId);
+        manager.getTask(taskId);
+
+        Task savedTask = new Task(task);
         savedTask.setName("Updated task");
         manager.updateTask(savedTask);
         manager.getTask(taskId);
 
-        ArrayList<Task> history = manager.getHistory();
+        List<Task> history = manager.getHistory();
+
+        assertEquals(2, history.size(), "Неверное количество записей в истории.");
+        assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");
+    }
+
+    @Test
+    void historySavePreviousVersionOfEpic() {
+        Epic epic = new Epic("Test epic", "Test epic desc");
+        int epicId = manager.createEpic(epic);
+        manager.getEpic(epicId);
+
+        Epic savedEpic = new Epic(epic);
+        savedEpic.setName("Updated epic");
+        manager.updateEpic(savedEpic);
+        manager.getEpic(epicId);
+
+        List<Task> history = manager.getHistory();
+
+        assertEquals(2, history.size(), "Неверное количество записей в истории.");
+        assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");
+    }
+
+    @Test
+    void historySavePreviousVersionOfSubtask() {
+        Epic epic = new Epic("Test epic", "Test epic desc");
+        int epicId = manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        int subtaskId = manager.createSubtask(subtask);
+        manager.getSubtask(subtaskId);
+
+        Subtask savedSubtask = new Subtask(subtask);
+        savedSubtask.setName("Updated subtask");
+        manager.updateSubtask(savedSubtask);
+        manager.getSubtask(subtaskId);
+
+        List<Task> history = manager.getHistory();
 
         assertEquals(2, history.size(), "Неверное количество записей в истории.");
         assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");

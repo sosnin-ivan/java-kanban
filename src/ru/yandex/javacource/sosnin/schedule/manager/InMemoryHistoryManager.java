@@ -3,9 +3,12 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 import ru.yandex.javacource.sosnin.schedule.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> history;
+    int MAX_HISTORY_SIZE = 10;
+
+    private final List<Task> history;
 
     public InMemoryHistoryManager() {
         this.history = new ArrayList<>();
@@ -21,12 +24,11 @@ public class InMemoryHistoryManager implements HistoryManager {
             history.removeFirst();
         }
 
-        Task newTask = new Task(task);
-        history.add(newTask);
+        history.add(task);
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return history;
     }
 }
