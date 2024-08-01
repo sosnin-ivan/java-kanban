@@ -21,11 +21,5 @@ class InMemoryHistoryManagerTest {
 
         assertEquals(1, history.getHistory().size(), "Неверный размер истории");
         assertEquals(task, history.getHistory().getFirst(), "Таска не совпадает с сохраненной в истории");
-
-        for (int i = 0; i < 11; i++) {
-            history.add(task);
-        }
-
-        assertEquals(10, history.getHistory().size(), "Размер истории не должен превышать 10");
     }
 }

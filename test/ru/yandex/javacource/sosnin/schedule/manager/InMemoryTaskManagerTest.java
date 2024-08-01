@@ -235,8 +235,7 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = manager.getHistory();
 
-        assertEquals(2, history.size(), "Неверное количество записей в истории.");
-        assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");
+        assertEquals(1, history.size(), "Неверное количество записей в истории.");
     }
 
     @Test
@@ -252,8 +251,7 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = manager.getHistory();
 
-        assertEquals(2, history.size(), "Неверное количество записей в истории.");
-        assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");
+        assertEquals(1, history.size(), "Неверное количество записей в истории.");
     }
 
     @Test
@@ -272,7 +270,6 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = manager.getHistory();
 
-        assertEquals(2, history.size(), "Неверное количество записей в истории.");
-        assertNotEquals(history.getFirst(), history.getLast(), "Задачи не должны быть одинаковыми");
+        assertEquals(1, history.size(), "Неверное количество записей в истории.");
     }
 }
