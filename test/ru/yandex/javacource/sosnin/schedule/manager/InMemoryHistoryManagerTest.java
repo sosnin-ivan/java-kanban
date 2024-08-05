@@ -16,10 +16,29 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void add() {
-        Task task = new Task("Test createTask", "Test createTask desc");
-        history.add(task);
+        Task task1 = new Task("Test createTask 1", "Test createTask desc 1");
+        Task task2 = new Task("Test createTask 2", "Test createTask desc 2");
+        task1.setId(1);
+        task2.setId(2);
+        history.add(task1);
+        history.add(task2);
+
+        assertEquals(2, history.getHistory().size(), "Неверный размер истории");
+        assertEquals(task1, history.getHistory().getFirst(), "Таска не совпадает с сохраненной в истории");
+    }
+
+    @Test
+    void remove() {
+        Task task1 = new Task("Test createTask 1", "Test createTask desc 1");
+        Task task2 = new Task("Test createTask 2", "Test createTask desc 2");
+        task1.setId(1);
+        task2.setId(2);
+        history.add(task1);
+        history.add(task2);
+
+        history.remove(1);
 
         assertEquals(1, history.getHistory().size(), "Неверный размер истории");
-        assertEquals(task, history.getHistory().getFirst(), "Таска не совпадает с сохраненной в истории");
+        assertEquals(task2, history.getHistory().getFirst(), "Таска не совпадает с сохраненной в истории");
     }
 }

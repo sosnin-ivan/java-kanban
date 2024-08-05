@@ -16,7 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         this.history = new HashMap<>();
     }
 
-    public void linkLast(Node node) {
+    private void linkLast(Node node) {
         if (tail == null) {
             head = node;
         } else {
@@ -26,7 +26,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         tail = node;
     }
 
-    public void removeNode(Node node) {
+    private void removeNode(Node node) {
         if (node.prev == null) {
             head = node.next;
         } else {
@@ -66,9 +66,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<Task> getHistory() {
         List<Task> tasks = new ArrayList<>();
-        for (Node node : history.values()) {
+
+        Node node = head;
+        while (node != null) {
             tasks.add(node.task);
+            node = node.next;
         }
+
         return tasks;
     }
 }
