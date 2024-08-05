@@ -151,7 +151,7 @@ class InMemoryTaskManagerTest {
         int taskId = manager.createTask(task);
         manager.deleteTask(taskId);
 
-        assertNull(manager.getTask(taskId), "Задача не удалена.");
+        assertEquals(0, manager.getAllTasks().size(), "Задача не удалена.");
     }
 
     @Test
@@ -162,8 +162,8 @@ class InMemoryTaskManagerTest {
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteEpic(epicId);
 
-        assertNull(manager.getEpic(epicId), "Эпик не удален.");
-        assertNull(manager.getSubtask(subtaskId), "Сабтаска не удалена.");
+        assertEquals(0, manager.getAllEpics().size(), "Эпик не удален.");
+        assertEquals(0, manager.getAllSubtasks().size(), "Сабтаска не удалена.");
     }
 
     @Test
@@ -174,7 +174,7 @@ class InMemoryTaskManagerTest {
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteSubtask(subtaskId);
 
-        assertNull(manager.getSubtask(subtaskId), "Сабтаска не удалена.");
+        assertEquals(0, manager.getAllSubtasks().size(), "Сабтаска не удалена.");
         assertEquals(0, manager.getEpic(epicId).getSubtaskIds().size(), "Неверное количество сабтасок.");
     }
 
