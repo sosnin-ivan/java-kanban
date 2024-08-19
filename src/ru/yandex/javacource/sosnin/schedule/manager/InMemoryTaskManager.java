@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int generatorId = 0;
+    protected int generatorId = 0;
 
     private final Map<Integer, Task> tasks;
     private final Map<Integer, Epic> epics;

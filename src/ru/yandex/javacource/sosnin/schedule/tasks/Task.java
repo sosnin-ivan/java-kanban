@@ -53,14 +53,16 @@ public class Task {
         this.status = status;
     }
 
+    public static Task fromString(String[] line) {
+        Task task = new Task(line[2], line[4]);
+        task.setId(Integer.parseInt(line[0]));
+        task.setStatus(Status.valueOf(line[3]));
+        return task;
+    }
+
     @Override
     public String toString() {
-        return "Task{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
+        return id + "," + Type.TASK + "," + name + "," + status + "," + description;
     }
 
     @Override
