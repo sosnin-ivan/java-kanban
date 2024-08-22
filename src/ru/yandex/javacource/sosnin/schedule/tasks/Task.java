@@ -6,12 +6,19 @@ public class Task {
     protected int id;
     protected String name;
     protected String description;
-    protected Status status;
+    protected TaskStatus status;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.status = Status.NEW;
+        this.status = TaskStatus.NEW;
+    }
+
+    public Task(int id, String name, String description, TaskStatus status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
     public Task(Task task) {
@@ -33,8 +40,12 @@ public class Task {
         return description;
     }
 
-    public Status getStatus() {
+    public TaskStatus getStatus() {
         return status;
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
     public void setId(int id) {
@@ -49,20 +60,27 @@ public class Task {
         this.description = description;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
-    }
-
-    public static Task fromString(String[] line) {
-        Task task = new Task(line[2], line[4]);
-        task.setId(Integer.parseInt(line[0]));
-        task.setStatus(Status.valueOf(line[3]));
-        return task;
     }
 
     @Override
     public String toString() {
-        return id + "," + Type.TASK + "," + name + "," + status + "," + description;
+        return "Task{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
+    public String toString(Task task) {
+        return task.getId() + "," +
+                task.getType() + "," +
+                task.getName() + "," +
+                task.getStatus() + "," +
+                task.getDescription() + "," +
+                (task.getType().equals(TaskType.SUBTASK) ? ((Subtask) task).getEpicId() : "");
     }
 
     @Override

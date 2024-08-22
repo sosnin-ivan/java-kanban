@@ -10,9 +10,19 @@ public class Epic extends Task {
         subtaskIds = new ArrayList<>();
     }
 
+    public Epic(int id, String name, String description, TaskStatus status) {
+        super(id, name, description, status);
+        subtaskIds = new ArrayList<>();
+    }
+
     public Epic(Epic epic) {
         super(epic);
         subtaskIds = new ArrayList<>();
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.EPIC;
     }
 
     public ArrayList<Integer> getSubtaskIds() {
@@ -35,15 +45,14 @@ public class Epic extends Task {
         subtaskIds.clear();
     }
 
-    public static Epic fromString(String[] line) {
-        Epic epic = new Epic(line[2], line[4]);
-        epic.setId(Integer.parseInt(line[0]));
-        epic.setStatus(Status.valueOf(line[3]));
-        return epic;
-    }
-
     @Override
     public String toString() {
-        return id + "," + Type.EPIC + "," + name + "," + status + "," + description;
+        return "Epic{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", subtaskIds=" + subtaskIds +
+                '}';
     }
 }

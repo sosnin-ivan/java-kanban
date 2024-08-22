@@ -4,15 +4,15 @@ import java.io.File;
 
 public class Managers {
     public static TaskManager getDefaultTaskManager() {
-        return new InMemoryTaskManager();
+        return new FileBackedTaskManager(new File("resources/task.csv"));
     }
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getFileBackedTaskManager() {
-        return new FileBackedTaskManager();
+    public static TaskManager getInMemoryTaskManager() {
+        return new InMemoryTaskManager();
     }
 
     public static TaskManager getFileBackedTaskManagerWithFile(File file) {

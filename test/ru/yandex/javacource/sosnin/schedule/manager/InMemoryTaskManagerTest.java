@@ -13,7 +13,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     public void beforeEach() {
-        manager = Managers.getDefaultTaskManager();
+        manager = Managers.getInMemoryTaskManager();
     }
 
     // interface methods
@@ -197,13 +197,13 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
 
-        assertEquals(manager.getEpic(epicId).getStatus(), Status.NEW, "Новый эпик должен быть в статусе NEW");
+        assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
         Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
-        subtask.setStatus(Status.DONE);
+        subtask.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask);
 
-        assertEquals(manager.getEpic(epicId).getStatus(), Status.DONE, "Статус эпика не изменен.");
+        assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.DONE, "Статус эпика не изменен.");
     }
 
     @Test
@@ -211,15 +211,15 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
 
-        assertEquals(manager.getEpic(epicId).getStatus(), Status.NEW, "Новый эпик должен быть в статусе NEW");
+        assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
         Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
         manager.createSubtask(subtask);
         Subtask subtask2 = new Subtask("Test subtask", "Test subtask desc", epicId);
-        subtask2.setStatus(Status.DONE);
+        subtask2.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask2);
 
-        assertEquals(manager.getEpic(epicId).getStatus(), Status.IN_PROGRESS, "Статус эпика не изменен.");
+        assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.IN_PROGRESS, "Статус эпика не изменен.");
     }
 
     @Test
