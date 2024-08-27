@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int generatorId = 0;
+    protected int generatorId = 0;
 
-    private final Map<Integer, Task> tasks;
-    private final Map<Integer, Epic> epics;
-    private final Map<Integer, Subtask> subtasks;
-    private final HistoryManager history;
+    protected final Map<Integer, Task> tasks;
+    protected final Map<Integer, Epic> epics;
+    protected final Map<Integer, Subtask> subtasks;
+    protected final HistoryManager history;
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
@@ -194,23 +194,23 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(epicId);
         List<Subtask> subtasksByEpic = getSubtasksByEpic(epicId);
 
-        ArrayList<Status> statuses = new ArrayList<>();
+        ArrayList<TaskStatus> statuses = new ArrayList<>();
         for (Subtask s : subtasksByEpic) {
             statuses.add(s.getStatus());
         }
 
-        if (isSimilarStatuses(statuses, Status.NEW)) {
-            epic.setStatus(Status.NEW);
-        } else if (isSimilarStatuses(statuses, Status.DONE)) {
-            epic.setStatus(Status.DONE);
+        if (isSimilarStatuses(statuses, TaskStatus.NEW)) {
+            epic.setStatus(TaskStatus.NEW);
+        } else if (isSimilarStatuses(statuses, TaskStatus.DONE)) {
+            epic.setStatus(TaskStatus.DONE);
         } else {
-            epic.setStatus(Status.IN_PROGRESS);
+            epic.setStatus(TaskStatus.IN_PROGRESS);
         }
     }
 
-    private boolean isSimilarStatuses(ArrayList<Status> statuses, Status targetStatus) {
+    private boolean isSimilarStatuses(ArrayList<TaskStatus> statuses, TaskStatus targetStatus) {
         boolean isSimilar = true;
-        for (Status status : statuses) {
+        for (TaskStatus status : statuses) {
             if (status != targetStatus) {
                 isSimilar = false;
                 break;

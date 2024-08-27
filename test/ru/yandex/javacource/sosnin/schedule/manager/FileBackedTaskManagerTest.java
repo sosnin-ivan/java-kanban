@@ -2,18 +2,24 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.javacource.sosnin.schedule.tasks.*;
+import ru.yandex.javacource.sosnin.schedule.tasks.Epic;
+import ru.yandex.javacource.sosnin.schedule.tasks.TaskStatus;
+import ru.yandex.javacource.sosnin.schedule.tasks.Subtask;
+import ru.yandex.javacource.sosnin.schedule.tasks.Task;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
-    private static TaskManager manager;
+class FileBackedTaskManagerTest {
+    private static FileBackedTaskManager manager;
 
     @BeforeEach
-    public void beforeEach() {
-        manager = Managers.getInMemoryTaskManager();
+    public void beforeEach() throws IOException {
+        File file = File.createTempFile("test", ".csv");
+        manager = (FileBackedTaskManager) Managers.getFileBackedTaskManagerWithFile(file);
     }
 
     // interface methods
@@ -271,5 +277,24 @@ class InMemoryTaskManagerTest {
         List<Task> history = manager.getHistory();
 
         assertEquals(1, history.size(), "Неверное количество записей в истории.");
+    }
+
+    @Test
+    void loadFromFile() throws IOException {
+        File file = File.createTempFile("test", ".csv");
+        manager = (FileBackedTaskManager) Managers.getFileBackedTaskManagerWithFile(file);
+
+        Task task = new Task("Test createTask", "Test createTask desc");
+        manager.createTask(task);
+        Epic epic = new Epic("Test createEpic", "Test createEpic desc");
+        final int epicId = manager.createEpic(epic);
+        Subtask subtask = new Subtask("Test createSubtask", "Test createSubtask desc", epicId);
+        manager.createSubtask(subtask);
+
+        FileBackedTaskManager new_manager = (FileBackedTaskManager) Managers.getFileBackedTaskManagerWithFile(file);
+
+        assertEquals(1, new_manager.getAllTasks().size(), "Неверное количество задач.");
+        assertEquals(1, new_manager.getAllEpics().size(), "Неверное количество эпиков.");
+        assertEquals(1, new_manager.getAllSubtasks().size(), "Неверное количество сабтасок.");
     }
 }
