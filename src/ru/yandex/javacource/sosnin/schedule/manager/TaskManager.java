@@ -2,7 +2,6 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface TaskManager {
