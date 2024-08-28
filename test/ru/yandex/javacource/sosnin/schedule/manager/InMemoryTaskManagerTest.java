@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -271,5 +273,20 @@ class InMemoryTaskManagerTest {
         List<Task> history = manager.getHistory();
 
         assertEquals(1, history.size(), "Неверное количество записей в истории.");
+    }
+
+    @Test
+    void addAndRemoveTaskToPrioritized() {
+        Task task = new Task(1, "Test task", "Test description", TaskStatus.NEW, LocalDateTime.now(), Duration.ofMinutes(30));
+        Task task2 = new Task(2, "Test task", "Test description", TaskStatus.NEW, LocalDateTime.now().plusHours(1), Duration.ofMinutes(30));
+        Task task3 = new Task(3, "Test task", "Test description", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5));
+
+        manager.createTask(task);
+        manager.createTask(task2);
+        manager.createTask(task3);
+        assertEquals(2, manager.getPrioritizedTasks().size());
+
+        manager.deleteTask(task.getId());
+        assertEquals(1, manager.getPrioritizedTasks().size());
     }
 }

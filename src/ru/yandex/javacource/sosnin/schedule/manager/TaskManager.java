@@ -2,6 +2,7 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TaskManager {
@@ -51,7 +52,9 @@ public interface TaskManager {
 
     void deleteSubtask(int id);
 
-    // history
+    // history & prioritized
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }
