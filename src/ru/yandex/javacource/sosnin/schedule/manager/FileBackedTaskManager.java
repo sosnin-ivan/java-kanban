@@ -78,7 +78,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 addTaskToPrioritized(subtask);
             }
             for (Epic epic : epics.values()) {
-                updateEpicDates(epic);
+                updateEpicParams(epic);
                 addTaskToPrioritized(epic);
             }
             generatorId = count;

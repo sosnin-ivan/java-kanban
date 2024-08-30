@@ -3,7 +3,6 @@ package ru.yandex.javacource.sosnin.schedule.tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskIds;
@@ -40,28 +39,8 @@ public class Epic extends Task {
         return endTime;
     }
 
-    public void setStartTime(List<Subtask> subtasks) {
-        for (Subtask subtask : subtasks) {
-            LocalDateTime subtaskStartTime = subtask.getStartTime();
-            if (subtaskStartTime != null) {
-                startTime = startTime.isBefore(subtaskStartTime) ? subtaskStartTime : startTime;
-            }
-        }
-    }
-
-    public void setDuration(List<Subtask> subtasks) {
-        for (Subtask subtask : subtasks) {
-            Duration subtaskDuration = subtask.getDuration();
-            if (subtaskDuration != null) {
-                duration = duration.plus(subtaskDuration);
-            }
-        }
-    }
-
-    public void setEndTime() {
-        if (startTime != null) {
-            endTime = startTime.plus(duration);
-        }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public ArrayList<Integer> getSubtaskIds() {

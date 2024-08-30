@@ -57,7 +57,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask description");
         final int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Test createSubtask", "Test createSubtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         final int subtaskId = manager.createSubtask(subtask);
         final Subtask savedSubtask = manager.getSubtask(subtaskId);
 
@@ -70,7 +70,7 @@ class InMemoryTaskManagerTest {
         assertEquals(1, subtasks.size(), "Неверное количество сабтасок.");
         assertEquals(subtask, subtasks.getFirst(), "Сабтаски не совпадают.");
 
-        Subtask failedSubtask = new Subtask("Test createSubtask", "Test createSubtask desc", 3);
+        Subtask failedSubtask = new Subtask(4, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(55), Duration.ofMinutes(5), 3);
         assertNull(manager.createSubtask(failedSubtask), "Сабтаска с неверным epicId создана.");
     }
 
@@ -102,7 +102,7 @@ class InMemoryTaskManagerTest {
     void updateSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test updateSubtask", "Test updateSubtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         String subtaskName = manager.getSubtask(subtaskId).getName();
 
@@ -125,7 +125,7 @@ class InMemoryTaskManagerTest {
     void deleteAllEpics() {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
 
         manager.deleteAllEpics();
@@ -138,7 +138,7 @@ class InMemoryTaskManagerTest {
     void deleteAllSubtasks() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
         manager.deleteAllSubtasks();
 
@@ -160,7 +160,7 @@ class InMemoryTaskManagerTest {
     void deleteEpic() {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteEpic(epicId);
 
@@ -172,7 +172,7 @@ class InMemoryTaskManagerTest {
     void deleteSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteSubtask(subtaskId);
 
@@ -201,7 +201,7 @@ class InMemoryTaskManagerTest {
 
         assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         subtask.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask);
 
@@ -215,9 +215,9 @@ class InMemoryTaskManagerTest {
 
         assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
-        Subtask subtask2 = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask2 = new Subtask(4, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(55), Duration.ofMinutes(5), epicId);
         subtask2.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask2);
 
@@ -261,7 +261,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.getSubtask(subtaskId);
 
@@ -283,7 +283,9 @@ class InMemoryTaskManagerTest {
 
         manager.createTask(task);
         manager.createTask(task2);
-        manager.createTask(task3);
+        assertThrows(TaskValidationException.class, () -> {
+            manager.createTask(task3);
+        });
         assertEquals(2, manager.getPrioritizedTasks().size());
 
         manager.deleteTask(task.getId());

@@ -9,6 +9,8 @@ import ru.yandex.javacource.sosnin.schedule.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,7 +63,7 @@ class FileBackedTaskManagerTest {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask description");
         final int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Test createSubtask", "Test createSubtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         final int subtaskId = manager.createSubtask(subtask);
         final Subtask savedSubtask = manager.getSubtask(subtaskId);
 
@@ -106,7 +108,7 @@ class FileBackedTaskManagerTest {
     void updateSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test updateSubtask", "Test updateSubtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         String subtaskName = manager.getSubtask(subtaskId).getName();
 
@@ -129,7 +131,7 @@ class FileBackedTaskManagerTest {
     void deleteAllEpics() {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
 
         manager.deleteAllEpics();
@@ -142,7 +144,7 @@ class FileBackedTaskManagerTest {
     void deleteAllSubtasks() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
         manager.deleteAllSubtasks();
 
@@ -164,7 +166,7 @@ class FileBackedTaskManagerTest {
     void deleteEpic() {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteEpic(epicId);
 
@@ -176,7 +178,7 @@ class FileBackedTaskManagerTest {
     void deleteSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.deleteSubtask(subtaskId);
 
@@ -205,7 +207,7 @@ class FileBackedTaskManagerTest {
 
         assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         subtask.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask);
 
@@ -219,9 +221,9 @@ class FileBackedTaskManagerTest {
 
         assertEquals(manager.getEpic(epicId).getStatus(), TaskStatus.NEW, "Новый эпик должен быть в статусе NEW");
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         manager.createSubtask(subtask);
-        Subtask subtask2 = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask2 = new Subtask(4, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(55), Duration.ofMinutes(5), epicId);
         subtask2.setStatus(TaskStatus.DONE);
         manager.createSubtask(subtask2);
 
@@ -265,7 +267,7 @@ class FileBackedTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Test subtask", "Test subtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.getSubtask(subtaskId);
 
@@ -288,7 +290,8 @@ class FileBackedTaskManagerTest {
         manager.createTask(task);
         Epic epic = new Epic("Test createEpic", "Test createEpic desc");
         final int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask("Test createSubtask", "Test createSubtask desc", epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
+
         manager.createSubtask(subtask);
 
         FileBackedTaskManager new_manager = (FileBackedTaskManager) Managers.getFileBackedTaskManagerWithFile(file);
