@@ -1,5 +1,8 @@
 package ru.yandex.javacource.sosnin.schedule.tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicId;
 
@@ -8,8 +11,16 @@ public class Subtask extends Task {
         this.epicId = epicID;
     }
 
-    public Subtask(int id, String name, String description, TaskStatus status, int epicID) {
-        super(id, name, description, status);
+    public Subtask(
+            int id,
+            String name,
+            String description,
+            TaskStatus status,
+            LocalDateTime startTime,
+            Duration duration,
+            int epicID
+    ) {
+        super(id, name, description, status, startTime, duration);
         this.epicId = epicID;
     }
 
@@ -39,6 +50,9 @@ public class Subtask extends Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", epicId=" + epicId +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
+                ", endTime=" + ((getStartTime() != null && getDuration() != null) ? getEndTime() : "") +
                 '}';
     }
 }

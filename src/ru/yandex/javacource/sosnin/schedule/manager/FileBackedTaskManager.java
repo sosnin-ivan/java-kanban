@@ -4,10 +4,12 @@ import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.Duration;
+import java.util.Objects;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private static final String HEADER = "id,type,name,status,description,epic";
+    private static final String HEADER = "id,type,name,status,description,epic,start_time,duration";
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -36,7 +38,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e.getMessage(), e);
         }
     }
 
@@ -67,10 +69,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         break;
                 }
             }
-            for (Map.Entry<Integer, Subtask> e : subtasks.entrySet()) {
-                final Subtask subtask = e.getValue();
+            for (Task task : tasks.values()) {
+                addTaskToPrioritized(task);
+            }
+            for (Subtask subtask : subtasks.values()) {
                 final Epic epic = epics.get(subtask.getEpicId());
                 epic.addSubtaskId(subtask.getId());
+                addTaskToPrioritized(subtask);
+            }
+            for (Epic epic : epics.values()) {
+                updateEpicParams(epic);
+                addTaskToPrioritized(epic);
             }
             generatorId = count;
         } catch (IOException e) {
@@ -84,12 +93,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         final String name = values[2];
         final TaskStatus status = TaskStatus.valueOf(values[3]);
         final String description = values[4];
+        final LocalDateTime startTime = Objects.equals(values[6], "null") ?
+                null : LocalDateTime.parse(values[6]);
+        final Duration duration = Objects.equals(values[7], "null") ?
+                null : Duration.ofMinutes(Long.parseLong(values[7]));
 
         if (taskType == TaskType.TASK) {
-            return new Task(id, name, description, status);
+            return new Task(id, name, description, status, startTime, duration);
         } else if (taskType == TaskType.SUBTASK) {
             final int epicId = Integer.parseInt(values[5]);
-            return new Subtask(id, name, description, status, epicId);
+            return new Subtask(id, name, description, status, startTime, duration, epicId);
         } else {
             return new Epic(id, name, description, status);
         }
