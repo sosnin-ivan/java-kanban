@@ -1,4 +1,4 @@
-package ru.yandex.javacource.sosnin.schedule.manager;
+package ru.yandex.javacource.sosnin.schedule.exceptions;
 
 public class TaskValidationException extends RuntimeException {
     public TaskValidationException(String message) {

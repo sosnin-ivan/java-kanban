@@ -2,6 +2,7 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.javacource.sosnin.schedule.exceptions.TaskValidationException;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.time.Duration;
@@ -161,7 +162,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
         Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
-        int subtaskId = manager.createSubtask(subtask);
+        manager.createSubtask(subtask);
         manager.deleteEpic(epicId);
 
         assertEquals(0, manager.getAllEpics().size(), "Эпик не удален.");
@@ -283,9 +284,7 @@ class InMemoryTaskManagerTest {
 
         manager.createTask(task);
         manager.createTask(task2);
-        assertThrows(TaskValidationException.class, () -> {
-            manager.createTask(task3);
-        });
+        assertThrows(TaskValidationException.class, () -> manager.createTask(task3));
         assertEquals(2, manager.getPrioritizedTasks().size());
 
         manager.deleteTask(task.getId());

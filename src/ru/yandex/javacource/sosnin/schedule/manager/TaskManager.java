@@ -1,5 +1,6 @@
 package ru.yandex.javacource.sosnin.schedule.manager;
 
+import ru.yandex.javacource.sosnin.schedule.exceptions.TaskValidationException;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.util.List;
@@ -7,11 +8,11 @@ import java.util.List;
 public interface TaskManager {
     // create
 
-    int createTask(Task task);
+    int createTask(Task task) throws TaskValidationException;
 
     int createEpic(Epic epic);
 
-    Integer createSubtask(Subtask subtask);
+    Integer createSubtask(Subtask subtask) throws TaskValidationException;
 
     // get
 
@@ -21,21 +22,21 @@ public interface TaskManager {
 
     List<Subtask> getAllSubtasks();
 
-    Task getTask(int id);
+    Task getTask(int id) throws NullPointerException;
 
-    Epic getEpic(int id);
+    Epic getEpic(int id) throws NullPointerException;
 
-    Subtask getSubtask(int id);
+    Subtask getSubtask(int id) throws NullPointerException;
 
-    List<Subtask> getSubtasksByEpic(int id);
+    List<Subtask> getSubtasksByEpic(int id) throws NullPointerException;
 
     // update
 
-    void updateTask(Task task);
+    void updateTask(Task task) throws NullPointerException;
 
-    void updateEpic(Epic epic);
+    void updateEpic(Epic epic) throws NullPointerException;
 
-    void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask) throws NullPointerException;
 
     // delete
 
@@ -45,11 +46,11 @@ public interface TaskManager {
 
     void deleteAllSubtasks();
 
-    void deleteTask(int id);
+    void deleteTask(int id) throws NullPointerException;
 
-    void deleteEpic(int id);
+    void deleteEpic(int id) throws NullPointerException;
 
-    void deleteSubtask(int id);
+    void deleteSubtask(int id) throws NullPointerException;
 
     // history & prioritized
 

@@ -1,5 +1,6 @@
 package ru.yandex.javacource.sosnin.schedule.manager;
 
+import ru.yandex.javacource.sosnin.schedule.exceptions.ManagerSaveException;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.io.*;
@@ -127,6 +128,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Integer subtaskId = super.createSubtask(subtask);
         save();
         return subtaskId;
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        super.updateTask(task);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
+        save();
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask) {
+        super.updateSubtask(subtask);
+        save();
     }
 
     @Override
