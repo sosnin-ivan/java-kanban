@@ -103,7 +103,7 @@ class InMemoryTaskManagerTest {
     void updateSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(25), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         String subtaskName = manager.getSubtask(subtaskId).getName();
 
@@ -262,7 +262,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(25), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.getSubtask(subtaskId);
 

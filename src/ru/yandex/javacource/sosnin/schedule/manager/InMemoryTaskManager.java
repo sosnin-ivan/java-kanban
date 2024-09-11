@@ -225,6 +225,9 @@ public class InMemoryTaskManager implements TaskManager {
     private void validateCorrectTime(Task newTask) throws TaskValidationException {
         LocalDateTime startTime = newTask.getStartTime();
         for (Task task : prioritizedTasks) {
+            if (task.getId() == newTask.getId()) {
+                continue;
+            }
             LocalDateTime existStart = task.getStartTime();
             LocalDateTime existEnd = task.getEndTime();
             if (
