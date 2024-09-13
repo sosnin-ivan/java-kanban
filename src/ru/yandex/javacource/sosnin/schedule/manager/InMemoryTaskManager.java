@@ -1,5 +1,6 @@
 package ru.yandex.javacource.sosnin.schedule.manager;
 
+import ru.yandex.javacource.sosnin.schedule.exceptions.TaskValidationException;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.time.Duration;
@@ -102,19 +103,28 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getSubtasksByEpic(int id) {
-        List<Subtask> subtasksByEpic = new ArrayList<>();
-        for (Subtask subtask : subtasks.values()) {
-            if (subtask.getEpicId() == id) {
-                subtasksByEpic.add(subtask);
+        if (epics.get(id) == null) {
+            throw new NullPointerException();
+        } else {
+            List<Subtask> subtasksByEpic = new ArrayList<>();
+            for (Subtask subtask : subtasks.values()) {
+                if (subtask.getEpicId() == id) {
+                    subtasksByEpic.add(subtask);
+                }
             }
+            return subtasksByEpic;
         }
-        return subtasksByEpic;
     }
 
     @Override
     public void updateTask(Task task) {
         int id = task.getId();
-        tasks.replace(id, task);
+        if (tasks.get(id) == null) {
+            throw new NullPointerException();
+        } else {
+            addTaskToPrioritized(task);
+            tasks.replace(id, task);
+        }
     }
 
     @Override
@@ -136,6 +146,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         int id = subtask.getId();
+        addTaskToPrioritized(subtask);
         subtasks.replace(id, subtask);
         updateEpicParams(epic);
     }
@@ -185,9 +196,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubtask(int id) {
         Subtask subtask = subtasks.get(id);
-        if (subtask == null) {
-            return;
-        }
         Epic epic = epics.get(subtask.getEpicId());
         epic.removeSubtaskId(id);
 
@@ -214,12 +222,19 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void validateCorrectTime(Task newTask) {
+    private void validateCorrectTime(Task newTask) throws TaskValidationException {
         LocalDateTime startTime = newTask.getStartTime();
         for (Task task : prioritizedTasks) {
+            if (task.getId() == newTask.getId()) {
+                continue;
+            }
             LocalDateTime existStart = task.getStartTime();
             LocalDateTime existEnd = task.getEndTime();
-            if (startTime.isAfter(existStart) && startTime.isBefore(existEnd)) {
+            if (
+                    startTime.isAfter(existStart) &&
+                            startTime.isBefore(existEnd) ||
+                            startTime.isEqual(existStart)
+            ) {
                 throw new TaskValidationException("Задача пересекаются с id=" +
                         newTask.getId() + " c " + existStart + " по " + existEnd);
             }

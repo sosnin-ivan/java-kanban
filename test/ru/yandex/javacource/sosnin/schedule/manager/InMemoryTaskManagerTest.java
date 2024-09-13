@@ -2,6 +2,7 @@ package ru.yandex.javacource.sosnin.schedule.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.javacource.sosnin.schedule.exceptions.TaskValidationException;
 import ru.yandex.javacource.sosnin.schedule.tasks.*;
 
 import java.time.Duration;
@@ -102,7 +103,7 @@ class InMemoryTaskManagerTest {
     void updateSubtask() {
         Epic epic = new Epic("Epic for subtask", "Epic for subtask desc");
         int epicId = manager.createEpic(epic);
-        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(25), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         String subtaskName = manager.getSubtask(subtaskId).getName();
 
@@ -161,7 +162,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
         Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
-        int subtaskId = manager.createSubtask(subtask);
+        manager.createSubtask(subtask);
         manager.deleteEpic(epicId);
 
         assertEquals(0, manager.getAllEpics().size(), "Эпик не удален.");
@@ -261,7 +262,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test epic", "Test epic desc");
         int epicId = manager.createEpic(epic);
 
-        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(15), Duration.ofMinutes(5), epicId);
+        Subtask subtask = new Subtask(3, "Test createSubtask", "Test createSubtask desc", TaskStatus.NEW, LocalDateTime.now().plusMinutes(25), Duration.ofMinutes(5), epicId);
         int subtaskId = manager.createSubtask(subtask);
         manager.getSubtask(subtaskId);
 
@@ -283,9 +284,7 @@ class InMemoryTaskManagerTest {
 
         manager.createTask(task);
         manager.createTask(task2);
-        assertThrows(TaskValidationException.class, () -> {
-            manager.createTask(task3);
-        });
+        assertThrows(TaskValidationException.class, () -> manager.createTask(task3));
         assertEquals(2, manager.getPrioritizedTasks().size());
 
         manager.deleteTask(task.getId());
